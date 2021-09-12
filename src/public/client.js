@@ -1,14 +1,24 @@
+// let store = Immutable.fromJS({
+//     user: Immutable.Map({ name: "Student" }),
+//     rovers: Immutable.List([]),
+//     roverDetail: Immutable.Map(),
+//     photos: Immutable.List([]),
+// })
+
 let store = {
-    user: { name: "Student" },
-    apod: '',
-    rovers: ['Curiosity', 'Opportunity', 'Spirit'],
+    user: Immutable.Map({ name: "Student" }),
+    rovers: Immutable.List([]),
+    roverDetail: Immutable.Map(),
+    photos: Immutable.List([]),
 }
 
 // add our markup to the page
 const root = document.getElementById('root')
+// const render = async (root, state) => { root.innerHTML = App(state.toJS()) }
 
 const updateStore = (store, newState) => {
     store = Object.assign(store, newState)
+    // store = store.merge(newState)
     render(root, store)
 }
 
@@ -25,18 +35,19 @@ const App = (state) => {
         <header></header>
         <main>
             ${Greeting(store.user.name)}
-            <section>
-                <h3>Put things on the page!</h3>
-                <p>Here is an example section.</p>
-                <p>
-                    One of the most popular websites at NASA is the Astronomy Picture of the Day. In fact, this website is one of
-                    the most popular websites across all federal agencies. It has the popular appeal of a Justin Bieber video.
-                    This endpoint structures the APOD imagery and associated metadata so that it can be repurposed for other
-                    applications. In addition, if the concept_tags parameter is set to True, then keywords derived from the image
-                    explanation are returned. These keywords could be used as auto-generated hashtags for twitter or instagram feeds;
-                    but generally help with discoverability of relevant imagery.
-                </p>
-                ${ImageOfTheDay(apod)}
+            <section class="rovers">
+                ${rovers.map(rover => ` 
+                    <div onclick="handleRoverDetail('${rover.name.toLowerCase()}')" class="rover">
+                        <div class="rover-body">
+                            <h3>${rover.name}</h3>
+                            <p>Status: ${rover.status}</p>
+                        </div>
+                    </div>
+                ` ).join("")}
+            </section>
+
+            <section class="rover-detail">
+                 ${roverDetail()}
             </section>
         </main>
         <footer></footer>
@@ -44,11 +55,64 @@ const App = (state) => {
 }
 
 // listening for load event because page should load before any JS is called
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
+    console.log(store);
     render(root, store)
+
+    console.log(store);
+    const rovers = await getRoversList();
+    updateStore(store, { rovers });
+    console.log(rovers);
+    console.log(store);
 })
 
 // ------------------------------------------------------  COMPONENTS
+
+const handleRoverDetail = async (rover) => {
+    try {
+        const result = await fetch(`rovers/${rover}`);
+        const photos = await result.json();
+        updateStore(store, { photos: photos.latest_photos });
+        updateStore(store, { roverDetail: photos.latest_photos.length > 0 ? photos.latest_photos[0].rover : null });
+        console.log(photos);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const roverDetail = () => {
+    if (store.roverDetail.id) {
+        return `
+                <p><span>Rover: </span>${store.roverDetail.name}</p>
+                <p><span>Launch date: </span>${store.roverDetail.launch_date}</p>
+				<p><span>Landing date:</span> ${store.roverDetail.landing_date}</p>
+                <p><span>Status: </span>${store.roverDetail.status}</p>
+                <p><span>Number of photos:</span> ${store.photos.length}</p>
+                <div>
+                ${store.photos.map((photo) =>
+                    `
+                    <img src="${photo.img_src}"/><p>${photo.earth_date}</p>
+                    `
+                )
+                .join("")}
+                </div>
+    `;
+    } else {
+        return ``;
+    }
+}
+
+
+const getRoversList = async () => {
+    try {
+        const result = await fetch('/rovers');
+        const rovers = await result.json();
+        return rovers;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 
 // Pure function that renders conditional information -- THIS IS JUST AN EXAMPLE, you can delete it.
 const Greeting = (name) => {
@@ -72,7 +136,7 @@ const ImageOfTheDay = (apod) => {
     console.log(photodate.getDate(), today.getDate());
 
     console.log(photodate.getDate() === today.getDate());
-    if (!apod || apod.date === today.getDate() ) {
+    if (!apod || apod.date === today.getDate()) {
         getImageOfTheDay(store)
     }
 

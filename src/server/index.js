@@ -34,10 +34,12 @@ app.get('/rovers/:name', async (req, res) => {
 
 app.get('/rovers', async (req, res) => {
     try {
-        const data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=${process.env.API_KEY}`)
-        .then(res => res.json());
+        const data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=${process.env.API_KEY}`);
+        // .then(res => res.json());
 
-        rovers = data.rovers.map(rover => {
+        let rovers = await data.json();
+
+        rovers = rovers.rovers.map(rover => {
             return {
                 name: rover.name,
                 status: rover.status,
@@ -50,6 +52,7 @@ app.get('/rovers', async (req, res) => {
         });
 
         console.log("Logging rovers info \n" + rovers);
+        console.log(rovers);
 
         res.send(rovers);
     } catch (error) {
