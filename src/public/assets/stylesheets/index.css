@@ -17,10 +17,10 @@ header {
 }
 
 #root {
-  height: 100vh;
-  display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 6em 1fr 4em;
+  height: 100vh;
+  display: grid;
   grid-template-areas:
     "header"
     "main"
@@ -33,38 +33,42 @@ main {
 }
 
 .rovers {
-  padding-top: 2em;
-  max-width: 1080px;
-  display: flex;
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
+  padding-top: 2em;
+  max-width: 720px;
+  display: flex;
   margin: 0 auto;
 }
 
 .rover {
-  box-shadow: 2px 4px 8px 0 rgb(46 61 73 / 20%);
-  border-radius: 5px;
   flex-basis: 320px;
-  margin: 0px 1em 2em 1em;
   cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 2px 4px 8px 0 rgb(46 61 73 / 20%);
+  margin: 0px 1em 2em 1em;
+  
 }
 
 .rover:hover {
-  box-shadow: 2px 4px 8px 0 rgb(46 61 73 / 60%);
+  box-shadow: 3px 5px 9px 0 rgb(46 61 73 / 60%);
 }
 
 .rover-image {
+  width: 320px;
+  height: 170px;
+  
 }
 
 .rover-detail {
   padding-top: 2em;
-  max-width: 1080px;
-  display: flex;
-  flex-direction: column;
+  max-width: 720px;
   justify-content: center;
   flex-wrap: wrap;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .rover-detail span {
@@ -73,10 +77,10 @@ main {
 }
 
 .rover-body {
-  display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
+  display: flex;
+  justify-content: center;
   padding: 1em;
 }
 
@@ -86,12 +90,12 @@ main {
 }
 
 footer {
-  grid-area: footer;
   display: flex;
+  grid-area: footer;
+  width: 100%;
+  background-color: white;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  background-color: white;
   border-top: solid 1px #dbe2e8;
 }

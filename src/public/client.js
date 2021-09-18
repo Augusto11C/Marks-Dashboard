@@ -26,10 +26,18 @@ const render = async (root, state) => {
     root.innerHTML = App(state)
 }
 
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
 
 // create content
 const App = (state) => {
     let { rovers, apod } = state
+
+    const dummyRoversImages = ["https://mars.nasa.gov/system/content_pages/main_images/374_mars2020-PIA21635.jpg",
+    "https://d2pn8kiwq2w21t.cloudfront.net/images/imagesmars202020180921PIA22109-16.width-1320.jpg",
+    "https://m.dw.com/image/54182462_401.jpg"];
 
     return `
         <header></header>
@@ -38,7 +46,8 @@ const App = (state) => {
             <section class="rovers">
                 ${rovers.map(rover => ` 
                     <div onclick="handleRoverDetail('${rover.name.toLowerCase()}')" class="rover">
-                        <div class="rover-body">
+                    <img src="${dummyRoversImages[getRandomInt(3)]}" class="rover-image" alt="${rover.name}">    
+                    <div class="rover-body">
                             <h3>${rover.name}</h3>
                             <p>Status: ${rover.status}</p>
                         </div>
@@ -84,9 +93,9 @@ const roverDetail = () => {
     if (store.roverDetail.id) {
         return `
                 <p><span>Rover: </span>${store.roverDetail.name}</p>
-                <p><span>Launch date: </span>${store.roverDetail.launch_date}</p>
-				<p><span>Landing date:</span> ${store.roverDetail.landing_date}</p>
                 <p><span>Status: </span>${store.roverDetail.status}</p>
+                <p><span>Launch date: </span>${store.roverDetail.launch_date}</p>
+				<p><span>Landing date:</span> ${store.roverDetail.landing_date}</p>                
                 <p><span>Number of photos:</span> ${store.photos.length}</p>
                 <div>
                 ${store.photos.map((photo) =>
