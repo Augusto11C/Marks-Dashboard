@@ -1,3 +1,4 @@
+
 // App state
 let store = Immutable.fromJS({
     selectedRover: '',
@@ -8,7 +9,7 @@ let store = Immutable.fromJS({
 
 
 const root = document.getElementById('root')
-
+// const render = async (root, state) => { root.innerHTML = App(state.toJS()) }
 
 const updateStore = (state, newState) => {
     store = state.merge(newState);
@@ -18,6 +19,10 @@ const updateStore = (state, newState) => {
 const render = async (root, storeAsParam) => {
     root.innerHTML = App(storeAsParam.toJS());
 }
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
 
 
 
@@ -80,6 +85,10 @@ window.addEventListener('load', async () => {
 //------------------------------------------------------ CREATE CONTEND
 const App = (storeAsParam) => {
 
+    const dummyRoversImages = ["https://mars.nasa.gov/system/content_pages/main_images/374_mars2020-PIA21635.jpg",
+    "https://d2pn8kiwq2w21t.cloudfront.net/images/imagesmars202020180921PIA22109-16.width-1320.jpg",
+    "https://m.dw.com/image/54182462_401.jpg"];
+
     return `
             <section>
             ${roversDetails(storeAsParam, createRoverDetailsCard)}
@@ -127,9 +136,11 @@ const showRoverPhotos = (storeAsParam, createImagesGrid) => {
                 </div> `
     } else {
         return ``
+
     }
 
 }
+
 
 
 
