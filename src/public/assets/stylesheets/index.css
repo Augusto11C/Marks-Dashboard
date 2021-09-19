@@ -3,6 +3,8 @@ body {
   flex-direction: column;
   font-family: Arial;
   min-height: 100vh;
+  overflow-x: hidden!important;
+  background-color: #dededf!important;
 }
 
 header {
