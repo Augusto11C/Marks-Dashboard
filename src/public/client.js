@@ -103,10 +103,13 @@ const roversDetails = (storeAsParam, createRoverDetailsCard) => {
                         </div> `;
 
         rovers.forEach((rover, index) => {
-            content = content.concat(createRoverDetailsCard(rover, index))
+            let newContent = content.concat(createRoverDetailsCard(rover, index))
+            if (newContent != undefined){
+                content = newContent;
+            }
         })
 
-        return `<div class="row py-5"> ${content} </div> `;
+        return `<div class="row py-5"> ${content} </div>`;
     }
 
 }
@@ -114,14 +117,16 @@ const roversDetails = (storeAsParam, createRoverDetailsCard) => {
 // Show rover photos and details | Higher-order Function
 const showRoverPhotos = (storeAsParam, createImagesGrid) => {
 
-    if (storeAsParam.selectedRover != '' && storeAsParam.selectedRover != undefined) {
-
+    if (storeAsParam.selectedRover != undefined && storeAsParam.selectedRover != '') {
+        
         return `<div class="container">
                     <div class="row py-5 text-center">
                         <h2 class="text-black text-uppercase mb-5">${storeAsParam.selectedRover}'s Photos</h2>
                         ${createImagesGrid(storeAsParam)}
                     </div>
                 </div> `
+    } else {
+        return ``
     }
 
 }
