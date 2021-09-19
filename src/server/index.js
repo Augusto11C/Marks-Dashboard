@@ -18,15 +18,15 @@ app.listen(port, () => console.log(`listening on port ${port}!`))
 // ============ API calls ============
 
 // Get picture of the day
-app.get('/apod', async (req, res) => {
-    try {
-        const image = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}`)
-            .then(res => res.json())
-        res.send({ image })
-    } catch (err) {
-        console.log('error:', err);
-    }
-})
+// app.get('/apod', async (req, res) => {
+//     try {
+//         const image = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}`)
+//             .then(res => res.json())
+//         res.send({ image })
+//     } catch (err) {
+//         console.log('error:', err);
+//     }
+// })
 
 // Get rover by name
 app.get('/rover', async (req, res) => {
@@ -49,5 +49,33 @@ app.get('/rover-photos', async (req, res) => {
         res.send(photos); 
     } catch (err) {
         console.log('error:', err);
+    }
+})
+
+app.get('/rovers', async (req, res) => {
+    try {
+        const data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=${process.env.API_KEY}`);
+        // .then(res => res.json());
+
+        let rovers = await data.json();
+
+        rovers = rovers.rovers.map(rover => {
+            return {
+                name: rover.name,
+                status: rover.status,
+                launch_date: rover.launch_date,
+                landing_date: rover.landing_date,
+                max_sol: rover.max_sol,
+                max_date: rover.max_date,
+                total_photos: rover.total_photos                
+            }
+        });
+
+        console.log("Logging rovers info \n" + rovers);
+        console.log(rovers);
+
+        res.send(rovers);
+    } catch (error) {
+        console.error(error);
     }
 })
