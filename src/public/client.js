@@ -51,21 +51,8 @@ window.addEventListener('load', async () => {
             console.log("event");
             console.log(event);
 
-            console.log("event.target");
-            console.log(event.target.id.split("-")[3]);
-
-            console.log("event.target.previousElementSibling");
-            console.log(event.target.previousElementSibling);
-
-            console.log("event.target.previousElementSibling.previousElementSibling");
-            console.log(event.target.previousElementSibling.previousElementSibling);
-
-
-            console.log("event.target.previousElementSibling.previousElementSibling.innerHTML");
-            console.log(event.target.previousElementSibling.previousElementSibling.innerHTML);
-
-            // roverName = event.target.previousElementSibling.previousElementSibling.innerHTML;
             roverName = event.target.id.split("-")[3];
+
             console.log("roverName");
             console.log(roverName);
 
@@ -85,11 +72,6 @@ window.addEventListener('load', async () => {
 
 //------------------------------------------------------ CREATE CONTEND
 const App = (storeAsParam) => {
-
-    const dummyRoversImages = ["https://mars.nasa.gov/system/content_pages/main_images/374_mars2020-PIA21635.jpg",
-    "https://d2pn8kiwq2w21t.cloudfront.net/images/imagesmars202020180921PIA22109-16.width-1320.jpg",
-    "https://m.dw.com/image/54182462_401.jpg"];
-
     return `
             <section>
             ${roversDetails(storeAsParam, createRoverDetailsCard)}
@@ -99,7 +81,6 @@ const App = (storeAsParam) => {
 }
 
 // ------------------------------------------------------  COMPONENTS
-// Higher-order function
 const roversDetails = (storeAsParam, createRoverDetailsCard) => {
     let rovers = storeAsParam.rovers;
     let roversNames = storeAsParam.roversNames;
@@ -124,7 +105,6 @@ const roversDetails = (storeAsParam, createRoverDetailsCard) => {
 
 }
 
-// Show rover photos and details | Higher-order Function
 const showRoverPhotos = (storeAsParam, createImagesGrid) => {
 
     if (storeAsParam.chosenRover != undefined && storeAsParam.chosenRover != '') {
@@ -167,13 +147,11 @@ const createRoverDetailsCard = (rover, index) => {
                     <li class="list-group-item">Landing date: ${rover.landing_date}</li>
                 
                 </ul>
-                <a href="#" id="rover-card-detail-${rover.name}"class="btn btn-primary mt-3">Show me!</a>
+                <a href="#" id="rover-card-detail-${rover.name}"class="btn btn-primary mt-3">Show Photos</a>
                 
             </div>
         </div>
     </div> `
-    //<a href="#" class="btn btn-primary mt-3">Show me!</a>
-    //<li class="list-group-item">Most recent photo: ${rover.photos.map(photoObj => photoObj.earth_date).reduce((date, currentDate) => currentDate > date ? currentDate : date)}</li>
 }
 
 const createImagesGrid = (storeAsParam) => {
