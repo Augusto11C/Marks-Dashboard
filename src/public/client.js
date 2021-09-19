@@ -1,10 +1,11 @@
 
 // App state
 let store = Immutable.fromJS({
-    selectedRover: '',
+    chosenRover: '',
+    roversPhotos: new Map([['Curiosity', {}], ['Opportunity', {}], ['Spirit', {}], ['Perseverance', {}]]),
     rovers: [],
-    roversNames: ['Curiosity', 'Opportunity', 'Spirit'],
-    roversPhotos: new Map([['Curiosity', {}], ['Opportunity', {}], ['Spirit', {}]])
+    roversNames: []
+    
 })
 
 
@@ -74,7 +75,7 @@ window.addEventListener('load', async () => {
             }
 
             else {
-                updateStore(store, { 'selectedRover': roverName });
+                updateStore(store, { 'chosenRover': roverName });
             }
         }
     }
@@ -126,11 +127,11 @@ const roversDetails = (storeAsParam, createRoverDetailsCard) => {
 // Show rover photos and details | Higher-order Function
 const showRoverPhotos = (storeAsParam, createImagesGrid) => {
 
-    if (storeAsParam.selectedRover != undefined && storeAsParam.selectedRover != '') {
+    if (storeAsParam.chosenRover != undefined && storeAsParam.chosenRover != '') {
         
         return `<div class="container">
                     <div class="row py-5 text-center">
-                        <h2 class="text-black text-uppercase mb-5">${storeAsParam.selectedRover}'s Photos</h2>
+                        <h2 class="text-black text-uppercase mb-5">${storeAsParam.chosenRover}'s Photos</h2>
                         ${createImagesGrid(storeAsParam)}
                     </div>
                 </div> `
@@ -178,7 +179,7 @@ const createRoverDetailsCard = (rover, index) => {
 const createImagesGrid = (storeAsParam) => {
     let content = ``;
 
-    storeAsParam.roversPhotos.get(storeAsParam.selectedRover).forEach(photo => {
+    storeAsParam.roversPhotos.get(storeAsParam.chosenRover).forEach(photo => {
         content = content.concat(`<div class="col-lg-3 col-md-5 col-sm-10 mx-auto rounded m-4">
                                         <img src="${photo}" class="img-fluid">
                                     </div>`);
@@ -229,6 +230,6 @@ const getRoverPhotos = (storeAsParam, roverName) => {
             console.log("data.latest_photos.map(imgObj => imgObj.img_src)")
             console.log(data.latest_photos.map(imgObj => imgObj.img_src))
             roversPhotos.set(roverName, data.latest_photos.map(imgObj => imgObj.img_src));
-            updateStore(storeAsParam, Immutable.Map({ roversPhotos: roversPhotos, selectedRover: roverName }));
+            updateStore(storeAsParam, Immutable.Map({ roversPhotos: roversPhotos, chosenRover: roverName }));
         })
 }
